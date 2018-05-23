@@ -23,25 +23,25 @@ function fromJson() {
     return ${_}result;
 }
 
-$router->add_route('GET', '/api/v1/${uncapEntityName}', function(){
+${_}router->add_route('GET', '/api/v1/${uncapEntityName}', function(){
     return (CarApiController::getInstance()->getAll());
 });
 
-$router->add_route('GET', '/api/v1/${uncapEntityName}/${entityKeyAttrsUrl}', function($entityKeyAttrs){
+${_}router->add_route('GET', '/api/v1/${uncapEntityName}/${entityKeyAttrsUrl}', function($entityKeyAttrs){
     return (CarApiController::getInstance()->getOne($entityKeyAttrs));
 });
 
-$router->add_route('POST', '/api/v1/${uncapEntityName}', function(){
+${_}router->add_route('POST', '/api/v1/${uncapEntityName}', function(){
     ${_}data = fromJson();
     return (CarApiController::getInstance()->create(${_}data));
 });
 
-$router->add_route('PUT', '/api/v1/${uncapEntityName}', function(){
-    $data = fromJson();
+${_}router->add_route('PUT', '/api/v1/${uncapEntityName}', function(){
+    ${_}data = fromJson();
     return (CarApiController::getInstance()->update(${_}data));
 });
 
-$router->add_route('DELETE', '/api/v1${uncapEntityName}/${entityKeyAttrsUrl}', function($entityKeyAttrs){
+${_}router->add_route('DELETE', '/api/v1${uncapEntityName}/${entityKeyAttrsUrl}', function($entityKeyAttrs){
     return (CarApiController::getInstance()->delete($entityKeyAttrs));
 });
 });

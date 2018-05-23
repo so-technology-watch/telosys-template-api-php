@@ -95,10 +95,10 @@ class ${capEntityName}ApiController
     public function create(${_}data) {
         ${_}${uncapEntityName} = ${_}this->populate(${_}data);
         ${_}result = ${_}this->${uncapEntityName}Repository->create(${_}${uncapEntityName});
-        if ($result === null) {
-            return $this->sendResponse(401);
+        if (${_}result === null) {
+            return ${_}this->sendResponse(401);
         } else {
-            return $this->sendResponse(201, $result);
+            return ${_}this->sendResponse(201, ${_}result);
         }
     }
 
