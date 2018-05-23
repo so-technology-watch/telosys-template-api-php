@@ -1,0 +1,47 @@
+<?php
+#set ( $_ = "$" )
+#set ( $uncapEntityName = ${fn.uncapitalize($entity.name)} )
+#set ( $capEntityName = ${fn.capitalize($entity.name)} )
+##
+#set( $entityKeyAttrs = "" )
+#set( $entityKeyAttrsUrl = "" )
+#foreach( $attribute in $entity.keyAttributes)
+#if( $foreach.count < 2 )
+#set( $entityKeyAttrs = "${_}"+${attribute.name}+${foreach.count} )
+#set( $entityKeyAttrsUrl = ":"+${attribute.name}+${foreach.count} )
+#else
+#set( $entityKeyAttrs = $entityKeyAttrs + ", "+"${_}"+${attribute.name}+${foreach.count} )
+#set( $entityKeyAttrsUrl = $entityKeyAttrsUrl + "/:"+${attribute.name}+${foreach.count} )
+#end ## end if
+#end ## end foreach
+##
+${_}router = Router::getInstance();
+
+function fromJson() {
+    ${_}json_str = file_get_contents('php://input');
+    ${_}result = (array) json_decode(${_}json_str);
+    return ${_}result;
+}
+
+$router->add_route('GET', '/api/v1/${uncapEntityName}', function(){
+    return (CarApiController::getInstance()->getAll());
+});
+
+$router->add_route('GET', '/api/v1/${uncapEntityName}/${entityKeyAttrsUrl}', function($entityKeyAttrs){
+    return (CarApiController::getInstance()->getOne($entityKeyAttrs));
+});
+
+$router->add_route('POST', '/api/v1/${uncapEntityName}', function(){
+    ${_}data = fromJson();
+    return (CarApiController::getInstance()->create(${_}data));
+});
+
+$router->add_route('PUT', '/api/v1/${uncapEntityName}', function(){
+    $data = fromJson();
+    return (CarApiController::getInstance()->update(${_}data));
+});
+
+$router->add_route('DELETE', '/api/v1${uncapEntityName}/${entityKeyAttrsUrl}', function($entityKeyAttrs){
+    return (CarApiController::getInstance()->delete($entityKeyAttrs));
+});
+});

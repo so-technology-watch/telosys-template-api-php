@@ -1,0 +1,132 @@
+<?php
+#set ( $_ = "$" )
+#set ( $uncapEntityName = ${fn.uncapitalize($entity.name)} )
+#set ( $capEntityName = ${fn.capitalize($entity.name)} )
+##
+#set( $entityFormatAttrs = "" )
+#foreach( $attribute in $entity.attributes )
+#if( $foreach.count < 2 )
+#set( $entityFormatAttrs = "${_}data['"+${attribute.name}+"']" )
+#else
+#set( $entityFormatAttrs = $entityFormatAttrs + ", ${_}data['"+${attribute.name}+"']" )
+#end ## end if
+#end ## end foreach
+##
+#set( $entityKeyAttrs = "" )
+#foreach( $attribute in $entity.keyAttributes)
+#if( $foreach.count < 2 )
+#set( $entityKeyAttrs = "${_}"+${attribute.name} )
+#else
+#set( $entityKeyAttrs = $entityKeyAttrs + ", "+"${_}"+${attribute.name} )
+#end ## end if
+#end ## end foreach
+##
+class ${capEntityName}ApiController
+{
+    private static ${_}_instance = null;
+
+    public static function getInstance() {
+        if (is_null(self::${_}_instance)) {
+            self::${_}_instance = new ${capEntityName}Controller();
+        }
+        return self::${_}_instance;
+    }
+
+    private ${_}${capEntityName}Repository;
+
+    public function __construct() {
+        // Persistence implementation
+        ${_}this->${capEntityName}Repository = ${capEntityName}Repository::getInstance();
+    }
+
+    /**
+     * Send Response method
+     * @param ${_}httpCode
+     * @param null ${_}result
+     * @return string
+     */
+    public function sendResponse(${_}httpCode, ${_}result = null) {
+        header('Content-Type: application/json');
+        http_response_code(${_}httpCode);
+        return json_encode(${_}result);
+    }
+
+    /**
+     * Data population method
+     * @param ${_}data
+     * @return ${capEntityName}
+     */
+    public function populate(${_}data) {
+        return new new ${capEntityName}($entityFormatAttrs);
+    }
+
+    /**
+     * Get all entities method
+     * @return string
+     */
+    public function getAll(${_}msg = null) {
+        ${_}result = ${_}this->${uncapEntityName}Repository->getAll();
+        if (${_}result === null) {
+            return ${_}this->sendResponse(404);
+        } else {
+            return ${_}this->sendResponse(200, ${_}result);
+        }
+    }
+
+    /**
+     * Get one entity by Id method
+     * @param ${_}id
+     * @return string
+     */
+    public function getOne($entityKeyAttrs) {
+        ${_}result = ${_}this->${uncapEntityName}Repository->getOne($entityKeyAttrs);
+        if (${_}result === null) {
+            return ${_}this->sendResponse(404);
+        } else {
+            return ${_}this->sendResponse(200, ${_}result);
+        }
+    }
+
+    /**
+     * Create one entity method
+     * @param ${_}data
+     * @return string
+     */
+    public function create(${_}data) {
+        ${_}${uncapEntityName} = ${_}this->populate(${_}data);
+        ${_}result = ${_}this->${uncapEntityName}Repository->create(${_}${uncapEntityName});
+        if ($result === null) {
+            return $this->sendResponse(401);
+        } else {
+            return $this->sendResponse(201, $result);
+        }
+    }
+
+    /**
+     * Update one entity method
+     * @param ${_}data
+     * @return string
+     */
+    public function update(${_}data) {
+		${_}${uncapEntityName} = ${_}this->populate(${_}data);
+        ${_}result = ${_}this->${capEntityName}Repository->update(${_}${capEntityName});
+        if (${_}result === null) {
+            return ${_}this->sendResponse(404);
+        } else {
+            return ${_}this->sendResponse(200, ${_}result);
+        }
+    }
+
+    /**
+     * Delete one entity method
+     * @return string
+     */
+    public function delete($entityKeyAttrs) {
+        ${_}result = ${_}this->${capEntityName}Repository->delete($entityKeyAttrs);
+        if (${_}result === null) {
+            return ${_}this->sendResponse(404);
+        } else {
+            return ${_}this->sendResponse(204, ${_}result);
+        }
+    }
+}
