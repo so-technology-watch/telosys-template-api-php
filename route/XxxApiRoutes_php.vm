@@ -7,11 +7,11 @@
 #set( $entityKeyAttrsUrl = "" )
 #foreach( $attribute in $entity.keyAttributes)
 #if( $foreach.count < 2 )
-#set( $entityKeyAttrs = "${_}"+${attribute.name} )
-#set( $entityKeyAttrsUrl = ":"+${attribute.name} )
+#set( $entityKeyAttrs = "${_}"+${fn.toLowerCase($attribute.name)} )
+#set( $entityKeyAttrsUrl = ":"+${fn.toLowerCase($attribute.name)} )
 #else
-#set( $entityKeyAttrs = $entityKeyAttrs + ", "+"${_}"+${attribute.name} )
-#set( $entityKeyAttrsUrl = $entityKeyAttrsUrl + "/:"+${attribute.name} )
+#set( $entityKeyAttrs = $entityKeyAttrs + ", "+"${_}"+${fn.toLowerCase($attribute.name)} )
+#set( $entityKeyAttrsUrl = $entityKeyAttrsUrl + "/:"+${fn.toLowerCase($attribute.name)} )
 #end ## end if
 #end ## end foreach
 ##
@@ -22,8 +22,8 @@ ${_}router->add_route('GET', '/api/v1/${uncapEntityName}', function(){
     return (${capEntityName}ApiController::getInstance()->getAll());
 });
 
-${_}router->add_route('GET', '/api/v1/${uncapEntityName}/${entityKeyAttrsUrl}', function($entityKeyAttrs){
-    return (${capEntityName}ApiController::getInstance()->getOne($entityKeyAttrs));
+${_}router->add_route('GET', '/api/v1/${uncapEntityName}/${entityKeyAttrsUrl}', function(${entityKeyAttrs}){
+    return (${capEntityName}ApiController::getInstance()->getOne(${entityKeyAttrs}));
 });
 
 ${_}router->add_route('POST', '/api/v1/${uncapEntityName}', function(){
@@ -36,6 +36,6 @@ ${_}router->add_route('PUT', '/api/v1/${uncapEntityName}', function(){
     return (${capEntityName}ApiController::getInstance()->update(${_}data));
 });
 
-${_}router->add_route('DELETE', '/api/v1${uncapEntityName}/${entityKeyAttrsUrl}', function($entityKeyAttrs){
-    return (${capEntityName}ApiController::getInstance()->delete($entityKeyAttrs));
+${_}router->add_route('DELETE', '/api/v1${uncapEntityName}/${entityKeyAttrsUrl}', function(${entityKeyAttrs}){
+    return (${capEntityName}ApiController::getInstance()->delete(${entityKeyAttrs}));
 });
