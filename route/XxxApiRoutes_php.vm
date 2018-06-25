@@ -36,6 +36,6 @@ ${_}router->add_route('PUT', '/api/v1/${uncapEntityName}', function(){
     return (${capEntityName}ApiController::getInstance()->update(${_}data));
 });
 
-${_}router->add_route('DELETE', '/api/v1${uncapEntityName}/${entityKeyAttrsUrl}', function(${entityKeyAttrs}){
+${_}router->add_route('DELETE', '/api/v1/${uncapEntityName}/${entityKeyAttrsUrl}', function(${entityKeyAttrs}){
     return (${capEntityName}ApiController::getInstance()->delete(${entityKeyAttrs}));
 });
