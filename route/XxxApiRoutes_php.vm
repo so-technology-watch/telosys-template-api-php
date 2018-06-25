@@ -15,33 +15,27 @@
 #end ## end if
 #end ## end foreach
 ##
+// ${capEntityName} api routes
 ${_}router = Router::getInstance();
 
-function fromJson() {
-    ${_}json_str = file_get_contents('php://input');
-    ${_}result = (array) json_decode(${_}json_str);
-    return ${_}result;
-}
-
 ${_}router->add_route('GET', '/api/v1/${uncapEntityName}', function(){
-    return (CarApiController::getInstance()->getAll());
+    return (${capEntityName}ApiController::getInstance()->getAll());
 });
 
 ${_}router->add_route('GET', '/api/v1/${uncapEntityName}/${entityKeyAttrsUrl}', function($entityKeyAttrs){
-    return (CarApiController::getInstance()->getOne($entityKeyAttrs));
+    return (${capEntityName}ApiController::getInstance()->getOne($entityKeyAttrs));
 });
 
 ${_}router->add_route('POST', '/api/v1/${uncapEntityName}', function(){
-    ${_}data = fromJson();
-    return (CarApiController::getInstance()->create(${_}data));
+    ${_}data = ${_}this->fromJson();;
+    return (${capEntityName}ApiController::getInstance()->create(${_}data));
 });
 
 ${_}router->add_route('PUT', '/api/v1/${uncapEntityName}', function(){
-    ${_}data = fromJson();
-    return (CarApiController::getInstance()->update(${_}data));
+    ${_}data = ${_}this->fromJson();;
+    return (${capEntityName}ApiController::getInstance()->update(${_}data));
 });
 
 ${_}router->add_route('DELETE', '/api/v1${uncapEntityName}/${entityKeyAttrsUrl}', function($entityKeyAttrs){
-    return (CarApiController::getInstance()->delete($entityKeyAttrs));
-});
+    return (${capEntityName}ApiController::getInstance()->delete($entityKeyAttrs));
 });

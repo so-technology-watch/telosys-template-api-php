@@ -27,16 +27,16 @@ class ${capEntityName}ApiController
 
     public static function getInstance() {
         if (is_null(self::${_}_instance)) {
-            self::${_}_instance = new ${capEntityName}Controller();
+            self::${_}_instance = new ${capEntityName}ApiController();
         }
         return self::${_}_instance;
     }
 
-    private ${_}${capEntityName}Repository;
+    private ${_}${uncapEntityName}Repository;
 
     public function __construct() {
         // Persistence implementation
-        ${_}this->${capEntityName}Repository = ${capEntityName}Repository::getInstance();
+        ${_}this->${uncapEntityName}Repository = ${capEntityName}Repository::getInstance();
     }
 
     /**
@@ -57,7 +57,7 @@ class ${capEntityName}ApiController
      * @return ${capEntityName}
      */
     public function populate(${_}data) {
-        return new new ${capEntityName}($entityFormatAttrs);
+        return new ${capEntityName}($entityFormatAttrs);
     }
 
     /**
@@ -109,7 +109,7 @@ class ${capEntityName}ApiController
      */
     public function update(${_}data) {
 		${_}${uncapEntityName} = ${_}this->populate(${_}data);
-        ${_}result = ${_}this->${capEntityName}Repository->update(${_}${capEntityName});
+        ${_}result = ${_}this->${uncapEntityName}Repository->update(${_}${uncapEntityName});
         if (${_}result === null) {
             return ${_}this->sendResponse(404);
         } else {
@@ -122,7 +122,7 @@ class ${capEntityName}ApiController
      * @return string
      */
     public function delete($entityKeyAttrs) {
-        ${_}result = ${_}this->${capEntityName}Repository->delete($entityKeyAttrs);
+        ${_}result = ${_}this->${uncapEntityName}Repository->delete($entityKeyAttrs);
         if (${_}result === null) {
             return ${_}this->sendResponse(404);
         } else {
